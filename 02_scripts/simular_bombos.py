@@ -20,9 +20,7 @@ df_power_ranking = pd.read_csv('01_datos_brutos/FIFA_PR_19_11_2025.csv').drop(co
 #Generamos los repechajes
 
 def generar_repechaje_uefa(df, random_state=None):
-    df_shuffle = df.sample(frac=1, random_state=random_state).reset_index(drop=True)
-    df_shuffle['llave'] = np.repeat([1,2,3,4], 4)
-    ganadores = df_shuffle.groupby('llave', group_keys=False).sample(1, random_state=random_state)
+    ganadores = df.groupby('llave', group_keys=False).sample(1, random_state=random_state)
 
     ganadores = pd.merge(ganadores, 
                          df_power_ranking[['codigo', 'puntos_totales']], 
@@ -33,11 +31,8 @@ def generar_repechaje_uefa(df, random_state=None):
 
 
 def generar_repechaje_fifa(df, random_state = None):
-    #Asignamos llaves
-    df_shuffle = df.sample(frac = 1, random_state = random_state)
-    df_shuffle['llave'] = np.repeat([1,2], 3)
 
-    ganadores = df_shuffle.groupby('llave').sample(1, random_state = random_state)
+    ganadores = df.groupby('llave').sample(1, random_state = random_state)
 
     ganadores = pd.merge(ganadores, 
                          df_power_ranking[['codigo', 'puntos_totales']], 
@@ -120,6 +115,6 @@ def asignar_bombos(df_clasificados,
     df_final = pd.concat([bombo1, bombo2, bombo3, bombo4_concat]).reset_index(drop=True)
     df_final['repechaje'] = df_final['repechaje'].fillna(0).astype(int)
 
-    return df_final, bombo1, bombo2, bombo3, bombo4_concat
+    return df_final
 
-
+df_bombos = asignar_bombos(df_clasificados, random_state= 42)
