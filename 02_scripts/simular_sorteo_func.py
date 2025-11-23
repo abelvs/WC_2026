@@ -215,3 +215,8 @@ def sortear_bombo_n(n_bombo,
 
     return grupos_dict, asignaciones_sorteo, bombos_slots
 
+import os
+
+if __name__ in ("__main__", "__mp_main__"):
+    port = int(os.getenv("PORT", 8080))
+    ui.run(host="0.0.0.0", port=port)
